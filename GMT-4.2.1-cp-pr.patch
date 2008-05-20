@@ -1,0 +1,11 @@
+--- GMT4.2.1/Makefile.cp-pr	2007-10-10 13:28:23.000000000 -0600
++++ GMT4.2.1/Makefile	2008-04-29 10:52:32.000000000 -0600
+@@ -131,7 +131,7 @@
+ install-data:
+ 		if [ ! $(rootdir)/share = $(datadir) ]; then \
+ 			mkdir -p $(datadir); \
+-			cp -r share/* $(datadir); \
++			cp -pr share/* $(datadir); \
+ 		else \
+ 			echo "Install share directory the same as distribution share directory - nothing copied"; \
+ 		fi
