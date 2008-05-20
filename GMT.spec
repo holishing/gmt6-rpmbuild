@@ -125,8 +125,7 @@ find -name \*.c | xargs chmod a-x
 %build
 #So we execute do_examples.sh
 export CSH=sh
-export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf-3"
-export LDFLAGS="-L%{_libdir}/netcdf-3"
+export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
 %configure --datadir=%{gmthome} \
            --enable-shared \
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
