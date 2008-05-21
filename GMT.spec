@@ -6,28 +6,17 @@
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
 
 Name:           GMT
-Version:        4.3.0
-Release:        2%{?dist}
+Version:        4.3.1
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
 License:        GPLv2
 URL:            http://gmt.soest.hawaii.edu/
-Source0:       ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
+Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
 Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
 Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
 Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_scripts.tar.bz2
-#Add DESTDIR to octave install patch, submitted upstream, will be in 4.3.1
-Patch0:         GMT-4.3.0-destdir.patch
-Patch1:         GMT-4.3.0-warning.patch
-#Patch from upstream to fix examples segfaulting
-Patch2:         GMT-4.3.0-segfault.patch
-#Use cp -pr to copy data, submitted upstream, will be in 4.3.1
-Patch3:         GMT-4.2.1-cp-pr.patch
-#Don't strip binaries, submitted upstream
-Patch4:         GMT-4.3.0-nostrip.patch
-#Don't link unneeded and link needed libraries, submitted upstream
-Patch5:         GMT-4.3.0-link.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
@@ -111,19 +100,13 @@ GMT 2 dimensional grids.
 
 %prep
 %setup -q -b1 -b2 -b3 -n GMT%{version}
-%patch -p1 -b .destdir
-%patch1 -p1 -b .warning
-%patch2 -p1 -b .segfault
-%patch3 -p1 -b .cp-pr
-%patch4 -p1 -b .nostrip
-%patch5 -p1 -b .link
 #We don't care about .bat files
 find -name \*.bat | xargs rm
 #Fix permissions
 find -name \*.c | xargs chmod a-x
 
 %build
-#So we execute do_examples.sh
+#So we execute do_examples.sh instead of do_examples.csh
 export CSH=sh
 export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
 %configure --datadir=%{gmthome} \
@@ -133,21 +116,16 @@ export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
            --disable-rpath --enable-www=%{_docdir}/%{name}-%{version}
 make
 make suppl
-# correct paths
-#sed -i.gmthome \
- #-e 's:\${prefix}/www/gmt/gmt_services.html:%{_docdir}/%{name}-%{version}/gmt_services.html:' src/GMT
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT INSTALL='install -c -p'  install-all
-#Don't ship .in files
-find $RPM_BUILD_ROOT%{gmthome}/conf -name \*.in | xargs rm
 #Setup configuration files 
 mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77,conf}
 pushd $RPM_BUILD_ROOT%{gmthome}/
 # put conf files in %{gmtconf} and do links in %{gmthome}
-for file in conf/*.conf conf/.gmtdefaults_* mgg/gmtfile_paths dbase/grdraster.info \
+for file in conf/*.conf conf/gmtdefaults_* mgg/gmtfile_paths dbase/grdraster.info \
     mgd77/mgd77_paths.txt; do
   mv $file $RPM_BUILD_ROOT%{gmtconf}/$file
   ln -s ../../../../../%{gmtconf}/$file $RPM_BUILD_ROOT%{gmthome}/$file
@@ -163,15 +141,20 @@ rm -rf __package_docs
 mkdir __package_docs
 cp -p src/*/README.* __package_docs
 rm __package_docs/README.xgrid __package_docs/README.mex
-#Fix permissions
-chmod a-x $RPM_BUILD_ROOT%{octave_mdir}/*.m
 
 
 %check
+#Cleanup from previous runs
+rm -f $RPM_BUILD_DIR/GMT%{version}/share/coast
+
+#Setup environment for the tests
 export GMT_SHAREDIR=$RPM_BUILD_DIR/GMT%{version}/share
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
+
 #Link in the coastline data
 ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
+
+#Run the examples - not that this doesn't return errors if any fail, check logs!
 make run-examples
 
 
@@ -192,8 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{gmtconf}/dbase
 %dir %{gmtconf}/mgd77
 %dir %{gmtconf}/conf
-%config(noreplace) %{gmtconf}/conf/*.conf 
-%config(noreplace) %{gmtconf}/conf/.gmtdefaults_* 
+%config(noreplace) %{gmtconf}/conf/*
 %config(noreplace) %{gmtconf}/mgg/gmtfile_paths
 %config(noreplace) %{gmtconf}/dbase/grdraster.info 
 %config(noreplace) %{gmtconf}/mgd77/mgd77_paths.txt
@@ -232,6 +214,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed May 21 2008 Orion Poplawski <orion@cora.nwra.com> 4.3.1-1
+- Update to 4.3.1, drop upstreamed patches
+- Remove other install fixes upstreamed
+
 * Mon May 12 2008 Orion Poplawski <orion@cora.nwra.com> 4.3.0-2
 - Add patch to link libraries properly
 - Run ldconfig in %%post, dummy
