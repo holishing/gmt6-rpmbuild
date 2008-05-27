@@ -7,7 +7,7 @@
 
 Name:           GMT
 Version:        4.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -27,7 +27,7 @@ BuildRequires:  octave-devel
 BuildRequires:  less
 Requires:       less
 Requires:       GMT-coastlines
-Provides:       gmt = %{name}-%{release}
+Provides:       gmt = %{version}-%{release}
 
 %description
 GMT is an open source collection of ~60 tools for manipulating geographic and
@@ -47,7 +47,7 @@ Science Foundation.
 Summary:        Development files for %{name}
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
-Provides:       gmt-devel = %{name}-%{release}
+Provides:       gmt-devel = %{version}-%{release}
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -58,7 +58,7 @@ developing applications that use %{name}.
 Summary:        Static libraries for %{name}
 Group:          Development/Libraries
 Requires:       %{name}-devel = %{version}-%{release}
-Provides:       gmt-static = %{name}-%{release}
+Provides:       gmt-static = %{version}-%{release}
 
 %description    static
 The %{name}-static package contains static libraries for developing
@@ -70,7 +70,7 @@ Summary:        Octave libraries for %{name}
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       octave(api) = %{octave_api}
-Provides:       gmt-octave = %{name}-%{release}
+Provides:       gmt-octave = %{version}-%{release}
 
 %description    octave
 The %{name}-octave package contains and Octave interface for developing
@@ -81,7 +81,7 @@ applications that use %{name}.
 Summary:        Generic Mapping Tools (Examples)
 Group:          Applications/Engineering
 Requires:       %{name} = %{version}-%{release}
-Provides:       gmt-examples = %{name}-%{release}
+Provides:       gmt-examples = %{version}-%{release}
 
 %description    examples
 Example scripts for the Generic Mapping Tools.
@@ -214,6 +214,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue May 27 2008 Orion Poplawski <orion@cora.nwra.com> 4.3.1-2
+- Fix lowercase provides (bug #448263)
+
 * Wed May 21 2008 Orion Poplawski <orion@cora.nwra.com> 4.3.1-1
 - Update to 4.3.1, drop upstreamed patches
 - Remove other install fixes upstreamed
