@@ -7,7 +7,7 @@
 
 Name:           GMT
 Version:        4.3.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -214,6 +214,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Tue May 27 2008 Orion Poplawski <orion@cora.nwra.com> 4.3.1-2
 - Fix lowercase provides (bug #448263)
 
