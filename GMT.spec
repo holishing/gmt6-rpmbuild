@@ -1,13 +1,14 @@
 %define gmthome %{_datadir}/GMT
 %define gmtconf %{_sysconfdir}/GMT
+%define gmtdoc %{_docdir}/gmt
 
 %{!?octave_api: %define octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
 %define octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
 
 Name:           GMT
-Version:        4.3.1
-Release:        3%{?dist}
+Version:        4.4.0
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -16,7 +17,7 @@ URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
 Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
 Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
-Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_scripts.tar.bz2
+Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
@@ -26,6 +27,7 @@ BuildRequires:  octave-devel
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
 Requires:       less
+Requires:       %{name}-common = %{version}-%{release}
 Requires:       GMT-coastlines
 Provides:       gmt = %{version}-%{release}
 
@@ -43,6 +45,18 @@ help from a global set of volunteers, and is supported by the National
 Science Foundation.
 
 
+%package        common
+Summary:        Common files for %{name}
+Group:          Applications/Engineering
+Requires:       %{name} = %{version}-%{release}
+Provides:       gmt-common = %{version}-%{release}
+BuildArch:      noarch
+
+%description    common
+The %{name}-common package contains common files for GMT (Generic
+Mapping Tools) package.
+
+
 %package        devel
 Summary:        Development files for %{name}
 Group:          Development/Libraries
@@ -52,6 +66,20 @@ Provides:       gmt-devel = %{version}-%{release}
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
+
+
+%package        doc
+Summary:        Documentation for %{name}
+Group:          Documentation
+Requires:       %{name} = %{version}-%{release}
+Provides:       gmt-doc = %{version}-%{release}
+Provides:       %{name}-examples = %{version}-%{release}
+Obsoletes:      %{name}-examples < %{version}-%{release}
+BuildArch:      noarch
+
+%description    doc
+The %{name}-doc package provides the documentation for the GMT (Generic
+Mapping Tools) package.
 
 
 %package        static
@@ -75,16 +103,6 @@ Provides:       gmt-octave = %{version}-%{release}
 %description    octave
 The %{name}-octave package contains and Octave interface for developing
 applications that use %{name}.
-
-
-%package        examples
-Summary:        Generic Mapping Tools (Examples)
-Group:          Applications/Engineering
-Requires:       %{name} = %{version}-%{release}
-Provides:       gmt-examples = %{version}-%{release}
-
-%description    examples
-Example scripts for the Generic Mapping Tools.
 
 
 # X11 application in a subpackage. No .desktop file since it
@@ -113,7 +131,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
            --enable-shared \
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
            --enable-mex-xdir=%{octave_octdir} \
-           --disable-rpath --enable-www=%{_docdir}/%{name}-%{version}
+           --disable-rpath
 make
 make suppl
 
@@ -131,11 +149,11 @@ for file in conf/*.conf conf/gmtdefaults_* mgg/gmtfile_paths dbase/grdraster.inf
   ln -s ../../../../../%{gmtconf}/$file $RPM_BUILD_ROOT%{gmthome}/$file
 done
 popd
-#Install examples
-cp -pr examples $RPM_BUILD_ROOT/%{gmthome}
+
 #Don't bring in csh for the csh examples
-find $RPM_BUILD_ROOT/%{gmthome}/examples -name \*.csh | 
+find $RPM_BUILD_ROOT/%{gmtdoc}/examples -name \*.csh | 
   xargs chmod a-x
+
 # separate the README files that are associated with gmt main package
 rm -rf __package_docs
 mkdir __package_docs
@@ -169,7 +187,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc README __package_docs/* COPYING ChangeLog www/gmt/doc/html gmt_bench-marks
+%doc README COPYING ChangeLog
+%{_bindir}/*
+%exclude %{_bindir}/xgridedit
+%{_libdir}/*.so.*
+
+%files common
+%defattr(-,root,root,-)
+%doc README __package_docs/* COPYING ChangeLog gmt_bench-marks
 %dir %{gmtconf}
 %dir %{gmtconf}/mgg
 %dir %{gmtconf}/dbase
@@ -179,12 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{gmtconf}/mgg/gmtfile_paths
 %config(noreplace) %{gmtconf}/dbase/grdraster.info 
 %config(noreplace) %{gmtconf}/mgd77/mgd77_paths.txt
-%{_bindir}/*
-%exclude %{_bindir}/xgridedit
-%{_libdir}/*.so.*
-%dir %{gmthome}
-%{gmthome}/*
-%exclude %{gmthome}/examples
+%{gmthome}/
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 
@@ -193,6 +213,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/*
 %{_libdir}/*.so
 %{_mandir}/man3/*.3*
+
+%files doc
+%defattr(-,root,root,-)
+%{gmtdoc}/
 
 %files static
 %defattr(-,root,root,-)
@@ -203,10 +227,6 @@ rm -rf $RPM_BUILD_ROOT
 %{octave_mdir}/*.m
 %{octave_octdir}/*.mex
 
-%files examples
-%defattr(-,root,root,-)
-%doc %{gmthome}/examples
-
 %files -n xgridedit
 %defattr(-,root,root,-)
 %doc src/xgrid/README.xgrid
@@ -214,6 +234,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 24 2009 Orion Poplawski <orion@cora.nwra.com> 4.4.0-1
+- Update to 4.4.0
+- Merge doc package into main package as noarch sub-packages
+- Merge examples sub-package into doc
+
 * Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
