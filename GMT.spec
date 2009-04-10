@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -128,6 +128,7 @@ find -name \*.c | xargs chmod a-x
 export CSH=sh
 export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
 %configure --datadir=%{gmthome} \
+           --enable-debug \
            --enable-shared \
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
            --enable-mex-xdir=%{octave_octdir} \
@@ -234,6 +235,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr 10 2009 Orion Poplawski <orion@cora.nwra.com> 4.4.0-2
+- Add --enable-debug to avoid stripping of -g from CFLAGS
+
 * Tue Feb 24 2009 Orion Poplawski <orion@cora.nwra.com> 4.4.0-1
 - Update to 4.4.0
 - Merge doc package into main package as noarch sub-packages
