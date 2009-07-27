@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -235,6 +235,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 27 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
