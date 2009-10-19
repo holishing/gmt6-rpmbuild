@@ -7,8 +7,8 @@
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
 
 Name:           GMT
-Version:        4.5.0
-Release:        4%{?dist}
+Version:        4.5.1
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -20,6 +20,7 @@ Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
 Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
 BuildRequires:  GMT-coastlines
@@ -129,6 +130,7 @@ export CSH=sh
 export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
 %configure --datadir=%{gmthome} \
            --enable-debug \
+           --enable-gdal GDAL_INC=%{_includedir}/gdal \
            --enable-shared \
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
            --enable-mex-xdir=%{octave_octdir} \
@@ -188,14 +190,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc README COPYING ChangeLog
+%doc README LICENSE.TXT ChangeLog
 %{_bindir}/*
 %exclude %{_bindir}/xgridedit
 %{_libdir}/*.so.*
 
 %files common
 %defattr(-,root,root,-)
-%doc README __package_docs/* COPYING ChangeLog gmt_bench-marks
+%doc README __package_docs/* LICENSE.TXT ChangeLog gmt_bench-marks
 %dir %{gmtconf}
 %dir %{gmtconf}/mgg
 %dir %{gmtconf}/dbase
@@ -235,6 +237,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Oct 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-1
+- Update to 4.5.1
+- Enable gdal support
+
 * Fri Jul 31 2009 Alex Lancaster <alexlan[AT]fedoraproject org> - 4.5.0-4
 - Rebuild against Octave 3.2.2
 
