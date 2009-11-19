@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -237,6 +237,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Nov 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-2
+- Rebuild for netcdf 4.1.0
+
 * Mon Oct 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-1
 - Update to 4.5.1
 - Enable gdal support
