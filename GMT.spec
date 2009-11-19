@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.5.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -23,7 +23,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
-#BuildRequires:  GMT-coastlines
+BuildRequires:  GMT-coastlines
 BuildRequires:  octave-devel
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
@@ -172,10 +172,10 @@ export GMT_SHAREDIR=$RPM_BUILD_DIR/GMT%{version}/share
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
 
 #Link in the coastline data
-#ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
+ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
 
 #Run the examples - not that this doesn't return errors if any fail, check logs!
-#make run-examples
+make run-examples
 
 
 %clean
@@ -236,6 +236,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Nov 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-3
+- Re-enable check
+
 * Thu Nov 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-2
 - Rebuild for netcdf 4.1.0
 - Don't make GMT-common depend on GMT
