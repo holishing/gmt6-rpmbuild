@@ -23,7 +23,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
-BuildRequires:  GMT-coastlines
+#BuildRequires:  GMT-coastlines
 BuildRequires:  octave-devel
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
