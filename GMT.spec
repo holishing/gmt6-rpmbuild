@@ -49,7 +49,6 @@ Science Foundation.
 %package        common
 Summary:        Common files for %{name}
 Group:          Applications/Engineering
-Requires:       %{name} = %{version}-%{release}
 Provides:       gmt-common = %{version}-%{release}
 BuildArch:      noarch
 
@@ -173,10 +172,10 @@ export GMT_SHAREDIR=$RPM_BUILD_DIR/GMT%{version}/share
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
 
 #Link in the coastline data
-ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
+#ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
 
 #Run the examples - not that this doesn't return errors if any fail, check logs!
-make run-examples
+#make run-examples
 
 
 %clean
@@ -239,6 +238,8 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu Nov 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-2
 - Rebuild for netcdf 4.1.0
+- Don't make GMT-common depend on GMT
+- Remove BR GMT-coastlines, disable check for bootstrap
 
 * Mon Oct 19 2009 Orion Poplawski <orion@cora.nwra.com> 4.5.1-1
 - Update to 4.5.1
