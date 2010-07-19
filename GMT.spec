@@ -7,7 +7,7 @@
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
 
 Name:           GMT
-Version:        4.5.2
+Version:        4.5.3
 Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
@@ -236,6 +236,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 19 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-1
+- Update to 4.5.3
+
 * Wed Jan 27 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.2-1
 - Update to 4.5.2
 
