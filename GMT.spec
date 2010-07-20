@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.5.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -23,13 +23,13 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
-BuildRequires:  GMT-coastlines >= 2.0.2
+BuildRequires:  GMT-coastlines >= 2.1.0
 BuildRequires:  octave-devel
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
 Requires:       less
 Requires:       %{name}-common = %{version}-%{release}
-Requires:       GMT-coastlines >= 2.0.2
+Requires:       GMT-coastlines >= 2.1.0
 Provides:       gmt = %{version}-%{release}
 
 %description
@@ -236,6 +236,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 20 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-2
+- Bump coastlines requirement to 2.1.0
+
 * Mon Jul 19 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-1
 - Update to 4.5.3
 
