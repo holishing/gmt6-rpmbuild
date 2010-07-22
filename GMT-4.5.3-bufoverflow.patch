@@ -1,0 +1,20 @@
+--- GMT4.5.3/src/psimage.c.bufoverflow	2010-03-23 20:36:44.000000000 -0600
++++ GMT4.5.3/src/psimage.c	2010-07-22 14:38:28.866393323 -0600
+@@ -32,7 +32,7 @@
+ 	struct C {	/* -C<xpos>/<ypos>[/<justify>] */
+ 		GMT_LONG active;
+ 		double x, y;
+-		char justify[2];
++		char justify[3];
+ 	} C;
+ 	struct E {	/* -E<dpi> */
+ 		GMT_LONG active;
+@@ -114,7 +114,7 @@
+ 
+ 				case 'C':
+ 					Ctrl->C.active = TRUE;
+-					n = sscanf (&argv[i][2], "%[^/]/%[^/]/%s", txt_a, txt_b, Ctrl->C.justify);
++					n = sscanf (&argv[i][2], "%[^/]/%[^/]/%2s", txt_a, txt_b, Ctrl->C.justify);
+ 					if (n < 2 || n > 3) {
+ 						fprintf (stderr, "%s ERROR: Syntax is -C<xpos>/<ypos>[/<justify>]\n", GMT_program);
+ 						error++;

@@ -8,7 +8,7 @@
 
 Name:           GMT
 Version:        4.5.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -18,6 +18,8 @@ Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
 Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
 Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
 Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
+#Fix buffer overflow in psimage (bug #617332)
+Patch1:         GMT-4.5.3-bufoverflow.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -118,10 +120,12 @@ GMT 2 dimensional grids.
 
 %prep
 %setup -q -b1 -b2 -b3 -n GMT%{version}
+%patch1 -p1 -b .bufoverflow
 #We don't care about .bat files
 find -name \*.bat | xargs rm
 #Fix permissions
 find -name \*.c | xargs chmod a-x
+
 
 %build
 #So we execute do_examples.sh instead of do_examples.csh
@@ -174,7 +178,7 @@ export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
 #Link in the coastline data
 ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
 
-#Run the examples - not that this doesn't return errors if any fail, check logs!
+#Run the examples - note that this doesn't return errors if any fail, check logs!
 make run-examples
 
 
@@ -236,6 +240,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jul 22 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-3
+- Fix buffer overflow in psimage (bug #617332)
+
 * Tue Jul 20 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-2
 - Bump coastlines requirement to 2.1.0
 
