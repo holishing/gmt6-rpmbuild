@@ -7,8 +7,8 @@
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
 
 Name:           GMT
-Version:        4.5.3
-Release:        3%{?dist}
+Version:        4.5.5
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -18,8 +18,6 @@ Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
 Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
 Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
 Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
-#Fix buffer overflow in psimage (bug #617332)
-Patch1:         GMT-4.5.3-bufoverflow.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -120,7 +118,6 @@ GMT 2 dimensional grids.
 
 %prep
 %setup -q -b1 -b2 -b3 -n GMT%{version}
-%patch1 -p1 -b .bufoverflow
 #We don't care about .bat files
 find -name \*.bat | xargs rm
 #Fix permissions
@@ -240,6 +237,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 3 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.5-1
+- Update to 4.5.5
+- Drop bufoverflow patch fixed upstream
+
 * Thu Jul 22 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.3-3
 - Fix buffer overflow in psimage (bug #617332)
 
