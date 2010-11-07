@@ -1,14 +1,18 @@
-%define gmthome %{_datadir}/GMT
-%define gmtconf %{_sysconfdir}/GMT
-%define gmtdoc %{_docdir}/gmt
+%global gmthome %{_datadir}/GMT
+%global gmtconf %{_sysconfdir}/GMT
+%global gmtdoc %{_docdir}/gmt
 
+#We can't link with octave until we are GPLv3+ compatible
+%bcond_with octave
+%if %with octave
 %{!?octave_api: %define octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
 %define octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
 %define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
+%endif
 
 Name:           GMT
 Version:        4.5.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -24,13 +28,18 @@ BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
 BuildRequires:  GMT-coastlines >= 2.1.0
+%if %with octave
 BuildRequires:  octave-devel
+%endif
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
 Requires:       less
 Requires:       %{name}-common = %{version}-%{release}
 Requires:       GMT-coastlines >= 2.1.0
 Provides:       gmt = %{version}-%{release}
+%if %without octave
+Obsoletes:      GMT-octave <= %{version}-%{release}
+%endif
 
 %description
 GMT is an open source collection of ~60 tools for manipulating geographic and
@@ -93,6 +102,7 @@ The %{name}-static package contains static libraries for developing
 applications that use %{name}.
 
 
+%if %with octave
 %package        octave
 Summary:        Octave libraries for %{name}
 Group:          Development/Libraries
@@ -103,6 +113,7 @@ Provides:       gmt-octave = %{version}-%{release}
 %description    octave
 The %{name}-octave package contains and Octave interface for developing
 applications that use %{name}.
+%endif
 
 
 # X11 application in a subpackage. No .desktop file since it
@@ -132,8 +143,10 @@ export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
            --enable-debug \
            --enable-gdal GDAL_INC=%{_includedir}/gdal \
            --enable-shared \
+%if %with octave
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
            --enable-mex-xdir=%{octave_octdir} \
+%endif
            --disable-rpath
 make
 make suppl
@@ -225,10 +238,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/*.a
 
+%if %with octave
 %files octave
 %defattr(-,root,root,-)
 %{octave_mdir}/*.m
 %{octave_octdir}/*.mex
+%endif
 
 %files -n xgridedit
 %defattr(-,root,root,-)
@@ -237,6 +252,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 6 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.5-2
+- Drop octave package due to licensing issues (bug 511844)
+
 * Wed Nov 3 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.5-1
 - Update to 4.5.5
 - Drop bufoverflow patch fixed upstream
