@@ -12,7 +12,7 @@
 
 Name:           GMT
 Version:        4.5.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -252,6 +252,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Sat Nov 6 2010 Orion Poplawski <orion@cora.nwra.com> 4.5.5-2
 - Drop octave package due to licensing issues (bug 511844)
 
