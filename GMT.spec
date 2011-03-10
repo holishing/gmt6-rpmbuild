@@ -11,8 +11,8 @@
 %endif
 
 Name:           GMT
-Version:        4.5.5
-Release:        3%{?dist}
+Version:        4.5.6
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -22,6 +22,8 @@ Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
 Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
 Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
 Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
+# Patch from CVS to fix triangulate segfault with no/empty input
+Patch0:         GMT-4.5.6-triangulate.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -129,6 +131,7 @@ GMT 2 dimensional grids.
 
 %prep
 %setup -q -b1 -b2 -b3 -n GMT%{version}
+%patch0 -p1 -b .triangulate
 #We don't care about .bat files
 find -name \*.bat | xargs rm
 #Fix permissions
@@ -141,7 +144,7 @@ export CSH=sh
 export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
 %configure --datadir=%{gmthome} \
            --enable-debug \
-           --enable-gdal GDAL_INC=%{_includedir}/gdal \
+           --enable-gdal \
            --enable-shared \
 %if %with octave
            --enable-octave --enable-mex-mdir=%{octave_mdir} \
@@ -252,6 +255,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 10 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.6-1
+- Update to 4.5.6
+- Add patch to avoid triangulate segfault on no or empty input (bug 681957).
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.5-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 

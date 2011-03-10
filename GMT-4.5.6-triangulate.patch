@@ -1,0 +1,33 @@
+--- GMT4.5.6/src/triangulate.c	2011-03-03 14:02:51.000000000 -0700
++++ GMT/src/triangulate.c	2011-03-10 08:42:44.274903875 -0700
+@@ -1,5 +1,5 @@
+ /*--------------------------------------------------------------------
+- *	$Id: triangulate.c,v 1.78 2011/03/03 21:02:51 guru Exp $
++ *	$Id: triangulate.c,v 1.79 2011/03/10 00:08:21 guru Exp $
+  *
+  *	Copyright (c) 1991-2011 by P. Wessel and W. H. F. Smith
+  *	See LICENSE.TXT file for copying and redistribution conditions.
+@@ -305,6 +305,7 @@
+ 		}
+ 		else if ((fp = GMT_fopen (argv[fno], GMT_io.r_mode)) == NULL) {
+ 			fprintf (stderr, "%s: Cannot open file %s\n", GMT_program, argv[fno]);
++			n_files--;
+ 			continue;
+ 		}
+ 
+@@ -343,6 +344,15 @@
+ 		if (fp != GMT_stdin) GMT_fclose (fp);
+ 	}
+ 
++	if (n_files == 0) {
++		fprintf (stderr, "%s: ERROR: No files could be read\n", GMT_program);
++		exit (EXIT_FAILURE);
++	}
++	if (n_read == 0) {
++		fprintf (stderr, "%s: ERROR: No data points read\n", GMT_program);
++		exit (EXIT_FAILURE);
++	}
++	
+ 	xx = (double *) GMT_memory ((void *)xx, (size_t)n, sizeof (double), GMT_program);
+ 	yy = (double *) GMT_memory ((void *)yy, (size_t)n, sizeof (double), GMT_program);
+ 	if (do_grid) zz = (double *) GMT_memory ((void *)zz, (size_t)n, sizeof (double), GMT_program);
