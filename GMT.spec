@@ -12,7 +12,7 @@
 
 Name:           GMT
 Version:        4.5.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -255,6 +255,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 31 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.6-2
+- Rebuild for netcdf 4.1.2
+
 * Thu Mar 10 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.6-1
 - Update to 4.5.6
 - Add patch to avoid triangulate segfault on no or empty input (bug 681957).
