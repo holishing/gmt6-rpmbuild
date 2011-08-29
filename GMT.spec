@@ -2,8 +2,7 @@
 %global gmtconf %{_sysconfdir}/GMT
 %global gmtdoc %{_docdir}/gmt
 
-#We can't link with octave until we are GPLv3+ compatible
-%bcond_with octave
+%bcond_without octave
 %if %with octave
 %{!?octave_api: %define octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
 %define octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
@@ -11,19 +10,16 @@
 %endif
 
 Name:           GMT
-Version:        4.5.6
-Release:        2%{?dist}
+Version:        4.5.7
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
-License:        GPLv2
+License:        GPLv2+
 URL:            http://gmt.soest.hawaii.edu/
-Source0:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_src.tar.bz2
-Source1:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_share.tar.bz2
-Source2:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_suppl.tar.bz2
-Source3:        ftp://ftp.soest.hawaii.edu/gmt/GMT%{version}_doc.tar.bz2
-# Patch from CVS to fix triangulate segfault with no/empty input
-Patch0:         GMT-4.5.6-triangulate.patch
+#Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}.tar.bz2
+#This is built from the above with the triangle source removed
+Source0:        gmt-%{version}-notriangle.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -130,8 +126,7 @@ GMT 2 dimensional grids.
 
 
 %prep
-%setup -q -b1 -b2 -b3 -n GMT%{version}
-%patch0 -p1 -b .triangulate
+%setup -q -n GMT%{version}
 #We don't care about .bat files
 find -name \*.bat | xargs rm
 #Fix permissions
@@ -255,6 +250,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 12 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.7-1
+- Update to 4.5.7
+- Drop triangulate patch applied upstream
+- License is now (as of 4.5.6 actually) GPLv2 or later
+- Re-enable octave support since we are GPLv3 compatible now
+
 * Thu Mar 31 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.6-2
 - Rebuild for netcdf 4.1.2
 
