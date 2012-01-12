@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        4.5.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -250,6 +250,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Fri Aug 12 2011 Orion Poplawski <orion@cora.nwra.com> 4.5.7-1
 - Update to 4.5.7
 - Drop triangulate patch applied upstream
