@@ -10,16 +10,14 @@
 %endif
 
 Name:           GMT
-Version:        4.5.7
-Release:        3%{?dist}
+Version:        4.5.8
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gmt.soest.hawaii.edu/
-#Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}.tar.bz2
-#This is built from the above with the triangle source removed
-Source0:        gmt-%{version}-notriangle.tar.bz2
+Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -250,6 +248,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr 3 2012 Orion Poplawski <orion@cora.nwra.com> 4.5.8-1
+- Update to 4.5.8
+
 * Mon Jan 16 2012 Orion Poplawski <orion@cora.nwra.com> 4.5.7-3
 - Rebuild for octave 3.6.0
 
