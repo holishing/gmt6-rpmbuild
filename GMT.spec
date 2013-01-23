@@ -10,7 +10,7 @@
 %endif
 
 Name:           GMT
-Version:        4.5.8
+Version:        4.5.9
 Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
@@ -248,6 +248,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan 22 2013 Orion Poplawski <orion@cora.nwra.com> 4.5.9-1
+- Update to 4.5.9
+
 * Tue Apr 3 2012 Orion Poplawski <orion@cora.nwra.com> 4.5.8-1
 - Update to 4.5.8
 
