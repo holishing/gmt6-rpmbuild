@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        4.5.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -251,6 +251,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Mar 12 2013 Orion Poplawski <orion@cora.nwra.com> 4.5.9-3
+- Add another needed include (bug #920675)
+
 * Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 

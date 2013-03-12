@@ -1,10 +1,11 @@
 diff -up GMT4.5.9/src/misc/gmtdigitize.c.includes GMT4.5.9/src/misc/gmtdigitize.c
 --- GMT4.5.9/src/misc/gmtdigitize.c.includes	2012-12-18 13:45:55.000000000 -0700
-+++ GMT4.5.9/src/misc/gmtdigitize.c	2013-01-22 20:54:51.367841719 -0700
-@@ -39,6 +39,8 @@
++++ GMT4.5.9/src/misc/gmtdigitize.c	2013-03-12 08:48:17.135820910 -0600
+@@ -39,6 +39,9 @@
   
  #include "gmt.h"
  
++#include <unistd.h>
 +#include <sys/types.h>
 +
  #ifndef WIN32
