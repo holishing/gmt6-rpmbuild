@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        4.5.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -51,6 +51,10 @@ boundaries.
 GMT is developed and maintained by Paul Wessel and Walter H. F.  Smith with
 help from a global set of volunteers, and is supported by the National
 Science Foundation.
+
+NOTE: Specific executables that conflict with other Fedora packages have been
+removed.  These functions can still be accessed via the GMT wrapper script
+with: GMT <function> [args]
 
 
 %package        common
@@ -175,6 +179,9 @@ mkdir __package_docs
 cp -p src/*/README.* __package_docs
 rm __package_docs/README.xgrid __package_docs/README.mex
 
+# Remove conflicting binaries:
+rm $RPM_BUILD_ROOT%{_bindir}/triangulate
+
 
 %check
 #Cleanup from previous runs
@@ -251,6 +258,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 13 2013 Orion Poplawski <orion@cora.nwra.com> 4.5.9-4
+- Drop triangulate binary to avoid conflicts (bug #913685)
+
 * Tue Mar 12 2013 Orion Poplawski <orion@cora.nwra.com> 4.5.9-3
 - Add another needed include (bug #920675)
 
