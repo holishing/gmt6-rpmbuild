@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        4.5.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -258,6 +258,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 02 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.5.9-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Wed Mar 13 2013 Orion Poplawski <orion@cora.nwra.com> 4.5.9-4
 - Drop triangulate binary to avoid conflicts (bug #913685)
 
