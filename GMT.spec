@@ -379,7 +379,7 @@ rm -rf $RPM_BUILD_ROOT
 - Remove duplicate html directory from examples package
 - Create __package_docs directory for main package docs
 
-* Tue Apr 28 2008 Orion Poplawski <orion@cora.nwra.com> 4.2.1-3
+* Tue Apr 29 2008 Orion Poplawski <orion@cora.nwra.com> 4.2.1-3
 - Remove unfree source
 - Split out xgridedit into sub-package
 - Add BR and R on less
