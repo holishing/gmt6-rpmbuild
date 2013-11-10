@@ -10,16 +10,14 @@
 %endif
 
 Name:           GMT
-Version:        4.5.9
-Release:        6%{?dist}
+Version:        4.5.11
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gmt.soest.hawaii.edu/
-Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}.tar.bz2
-# Add needed includes
-Patch0:         GMT-includes.patch
+Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
@@ -130,12 +128,9 @@ GMT 2 dimensional grids.
 
 
 %prep
-%setup -q -n GMT%{version}
-%patch0 -p1 -b .includes
+%setup -q -n gmt-%{version}
 #We don't care about .bat files
 find -name \*.bat | xargs rm
-#Fix permissions
-find -name \*.c | xargs chmod a-x
 
 
 %build
@@ -258,6 +253,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 9 2013 Orion Poplawski - 4.5.11-1
+- Update to 4.5.11
+- Drop includes patch fixed upstream
+
 * Tue Aug 27 2013 Orion Poplawski - 4.5.9-6
 - Rebuild for gdal 1.10.0
 
