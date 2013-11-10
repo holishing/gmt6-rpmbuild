@@ -178,14 +178,14 @@ rm $RPM_BUILD_ROOT%{_bindir}/triangulate
 
 %check
 #Cleanup from previous runs
-rm -f $RPM_BUILD_DIR/GMT%{version}/share/coast
+rm -f $RPM_BUILD_DIR/%{?buildsubdir}/share/coast
 
 #Setup environment for the tests
-export GMT_SHAREDIR=$RPM_BUILD_DIR/GMT%{version}/share
+export GMT_SHAREDIR=$RPM_BUILD_DIR/%{?buildsubdir}/share
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
 
 #Link in the coastline data
-ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
+ln -s %{gmthome}/coast $RPM_BUILD_DIR/%{?buildsubdir}/share
 
 #Run the examples - note that this doesn't return errors if any fail, check logs!
 make run-examples
