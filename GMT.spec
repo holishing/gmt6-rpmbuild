@@ -18,7 +18,6 @@ Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
@@ -151,7 +150,6 @@ make suppl
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT INSTALL='install -c -p'  install-all
 #Setup configuration files 
 mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77,conf}
@@ -193,24 +191,18 @@ ln -s %{gmthome}/coast $RPM_BUILD_DIR/GMT%{version}/share
 make run-examples
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 
 %files
-%defattr(-,root,root,-)
 %doc README LICENSE.TXT ChangeLog
 %{_bindir}/*
 %exclude %{_bindir}/xgridedit
 %{_libdir}/*.so.*
 
 %files common
-%defattr(-,root,root,-)
 %doc README __package_docs/* LICENSE.TXT ChangeLog gmt_bench-marks
 %dir %{gmtconf}
 %dir %{gmtconf}/mgg
@@ -226,28 +218,23 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/*.5*
 
 %files devel
-%defattr(-,root,root,-)
 %{_includedir}/*
 %{_libdir}/*.so
 %{_mandir}/man3/*.3*
 
 %files doc
-%defattr(-,root,root,-)
 %{gmtdoc}/
 
 %files static
-%defattr(-,root,root,-)
 %{_libdir}/*.a
 
 %if %with octave
 %files octave
-%defattr(-,root,root,-)
 %{octave_mdir}/*.m
 %{octave_octdir}/*.mex
 %endif
 
 %files -n xgridedit
-%defattr(-,root,root,-)
 %doc src/xgrid/README.xgrid
 %{_bindir}/xgridedit
 
@@ -256,6 +243,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Nov 9 2013 Orion Poplawski - 4.5.11-1
 - Update to 4.5.11
 - Drop includes patch fixed upstream
+- Spec cleanup
 
 * Tue Aug 27 2013 Orion Poplawski - 4.5.9-6
 - Rebuild for gdal 1.10.0
