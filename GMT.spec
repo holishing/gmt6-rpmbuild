@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        4.5.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 Group:          Applications/Engineering
@@ -240,6 +240,9 @@ make run-examples
 
 
 %changelog
+* Sat Dec 28 2013 Kevin Fenzi <kevin@scrye.com> - 4.5.11-2
+- Rebuild to fix broken deps
+
 * Sat Nov 9 2013 Orion Poplawski - 4.5.11-1
 - Update to 4.5.11
 - Drop includes patch fixed upstream
