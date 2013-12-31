@@ -1,8 +1,8 @@
-%global gmthome %{_datadir}/GMT
-%global gmtconf %{_sysconfdir}/GMT
+%global gmthome %{_datadir}/gmt
+%global gmtconf %{_sysconfdir}/gmt
 %global gmtdoc %{_docdir}/gmt
 
-%bcond_without octave
+%bcond_with octave
 %if %with octave
 %{!?octave_api: %define octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
 %define octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
@@ -10,19 +10,21 @@
 %endif
 
 Name:           GMT
-Version:        4.5.11
-Release:        2%{?dist}
+Version:        5.1.0
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
-Group:          Applications/Engineering
-License:        GPLv2+
+License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
 
+BuildRequires:  cmake
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
-BuildRequires:  GMT-coastlines >= 2.1.0
+BuildRequires:  pcre-devel
+BuildRequires:  dcw-gmt
+BuildRequires:  gshhg-gmt-nc4
 %if %with octave
 BuildRequires:  octave-devel
 %endif
@@ -30,11 +32,15 @@ BuildRequires:  octave-devel
 BuildRequires:  less
 Requires:       less
 Requires:       %{name}-common = %{version}-%{release}
-Requires:       GMT-coastlines >= 2.1.0
+Requires:       dcw-gmt
+Requires:       gshhg-gmt-nc4
 Provides:       gmt = %{version}-%{release}
 %if %without octave
-Obsoletes:      GMT-octave <= %{version}-%{release}
+Obsoletes:      GMT-octave <= 4.5.11
 %endif
+
+# Do not generate provides for plugins
+%global __provides_exclude_from ^%{_libdir}/gmt/.*\\.so$
 
 %description
 GMT is an open source collection of ~60 tools for manipulating geographic and
@@ -56,7 +62,6 @@ with: GMT <function> [args]
 
 %package        common
 Summary:        Common files for %{name}
-Group:          Applications/Engineering
 Provides:       gmt-common = %{version}-%{release}
 BuildArch:      noarch
 
@@ -67,9 +72,9 @@ Mapping Tools) package.
 
 %package        devel
 Summary:        Development files for %{name}
-Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Provides:       gmt-devel = %{version}-%{release}
+Obsoletes:      GMT-static <= 4.5.11
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -78,7 +83,6 @@ developing applications that use %{name}.
 
 %package        doc
 Summary:        Documentation for %{name}
-Group:          Documentation
 Requires:       %{name} = %{version}-%{release}
 Provides:       gmt-doc = %{version}-%{release}
 Provides:       %{name}-examples = %{version}-%{release}
@@ -90,21 +94,9 @@ The %{name}-doc package provides the documentation for the GMT (Generic
 Mapping Tools) package.
 
 
-%package        static
-Summary:        Static libraries for %{name}
-Group:          Development/Libraries
-Requires:       %{name}-devel = %{version}-%{release}
-Provides:       gmt-static = %{version}-%{release}
-
-%description    static
-The %{name}-static package contains static libraries for developing
-applications that use %{name}.
-
-
 %if %with octave
 %package        octave
 Summary:        Octave libraries for %{name}
-Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       octave(api) = %{octave_api}
 Provides:       gmt-octave = %{version}-%{release}
@@ -115,80 +107,43 @@ applications that use %{name}.
 %endif
 
 
-# X11 application in a subpackage. No .desktop file since it
-# requires a file name as argument
-%package -n      xgridedit
-Summary:         GMT grid code graphical editor
-Group:           Applications/Engineering
-
-%description -n xgridedit
-XGridEdit is an application for viewing and editing the numerical values in
-GMT 2 dimensional grids.
-
-
 %prep
 %setup -q -n gmt-%{version}
-#We don't care about .bat files
-find -name \*.bat | xargs rm
 
 
 %build
-#So we execute do_examples.sh instead of do_examples.csh
-export CSH=sh
-export CFLAGS="$RPM_OPT_FLAGS -fPIC -I%{_includedir}/netcdf"
-%configure --datadir=%{gmthome} \
-           --enable-debug \
-           --enable-gdal \
-           --enable-shared \
+mkdir build
+pushd build
+%{cmake} \
+  -DGSHHG_ROOT=%{_prefix} \
+  -DFLOCK=on \
+  -DGMT_INSTALL_MODULE_LINKS=off \
+  -DGMT_INSTALL_TRADITIONAL_FOLDERNAMES=off \
+  -DGMT_MANDIR=%{_mandir} \
+  -DLICENSE_RESTRICTED=LGPL \
 %if %with octave
-           --enable-octave --enable-mex-mdir=%{octave_mdir} \
-           --enable-mex-xdir=%{octave_octdir} \
+  -DGMT_OCTAVE=BOOL:ON \
 %endif
-           --disable-rpath
-make
-make suppl
+  -DGMT_OPENMP=BOOL:ON \
+  ..
+make %{?_smp_mflags}
 
 
 %install
-make DESTDIR=$RPM_BUILD_ROOT INSTALL='install -c -p'  install-all
+make -C build DESTDIR=$RPM_BUILD_ROOT install
 #Setup configuration files 
 mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77,conf}
 pushd $RPM_BUILD_ROOT%{gmthome}/
 # put conf files in %{gmtconf} and do links in %{gmthome}
-for file in conf/*.conf conf/gmtdefaults_* mgg/gmtfile_paths dbase/grdraster.info \
+for file in conf/*.conf mgg/gmtfile_paths dbase/grdraster.info \
     mgd77/mgd77_paths.txt; do
   mv $file $RPM_BUILD_ROOT%{gmtconf}/$file
   ln -s ../../../../../%{gmtconf}/$file $RPM_BUILD_ROOT%{gmthome}/$file
 done
 popd
 
-#Don't bring in csh for the csh examples
-find $RPM_BUILD_ROOT/%{gmtdoc}/examples -name \*.csh | 
-  xargs chmod a-x
-
-# separate the README files that are associated with gmt main package
-rm -rf __package_docs
-mkdir __package_docs
-cp -p src/*/README.* __package_docs
-rm __package_docs/README.xgrid __package_docs/README.mex
-
-# Remove conflicting binaries:
-rm $RPM_BUILD_ROOT%{_bindir}/triangulate
-
-
-%check
-#Cleanup from previous runs
-rm -f $RPM_BUILD_DIR/%{?buildsubdir}/share/coast
-
-#Setup environment for the tests
-export GMT_SHAREDIR=$RPM_BUILD_DIR/%{?buildsubdir}/share
-export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir}
-
-#Link in the coastline data
-ln -s %{gmthome}/coast $RPM_BUILD_DIR/%{?buildsubdir}/share
-
-#Run the examples - note that this doesn't return errors if any fail, check logs!
-make run-examples
+# Don't ship .bat files
+find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %post -p /sbin/ldconfig
@@ -197,13 +152,13 @@ make run-examples
 
 
 %files
-%doc README LICENSE.TXT ChangeLog
+%doc Announcements ChangeLog COPYING.LESSERv3 COPYINGv3 LICENSE.TXT README
 %{_bindir}/*
-%exclude %{_bindir}/xgridedit
-%{_libdir}/*.so.*
+%{_libdir}/*.so.5*
+%{_libdir}/gmt/
 
 %files common
-%doc README __package_docs/* LICENSE.TXT ChangeLog gmt_bench-marks
+%doc COPYING.LESSERv3 COPYINGv3 LICENSE.TXT
 %dir %{gmtconf}
 %dir %{gmtconf}/mgg
 %dir %{gmtconf}/dbase
@@ -225,21 +180,19 @@ make run-examples
 %files doc
 %{gmtdoc}/
 
-%files static
-%{_libdir}/*.a
-
 %if %with octave
 %files octave
 %{octave_mdir}/*.m
 %{octave_octdir}/*.mex
 %endif
 
-%files -n xgridedit
-%doc src/xgrid/README.xgrid
-%{_bindir}/xgridedit
-
 
 %changelog
+* Tue Dec 31 2013 Orion Poplawski - 5.1.0-1
+- Update to 5.1.0
+- Disable octave support - removed from upstream for now
+- Drop xgridedit sub-package - removed from upstream
+
 * Sat Dec 28 2013 Kevin Fenzi <kevin@scrye.com> - 4.5.11-2
 - Rebuild to fix broken deps
 
