@@ -1,0 +1,28 @@
+diff -up gmt-5.1.0/src/common_sighandler.c.arm gmt-5.1.0/src/common_sighandler.c
+--- gmt-5.1.0/src/common_sighandler.c.arm	2013-09-07 10:37:35.000000000 -0600
++++ gmt-5.1.0/src/common_sighandler.c	2014-01-02 09:43:42.226566150 -0700
+@@ -67,18 +67,24 @@ void backtrace_symbols_fd(void *const *b
+ #elif defined(__FreeBSD__)
+ # ifdef __x86_64__
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.mc_rip)
++# elif defined( __arm__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.arm_pc)
+ # else
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.mc_eip)
+ # endif
+ #elif defined(SIZEOF_GREG_T)
+ # ifdef __x86_64__
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.gregs[REG_RIP])
++# elif defined( __arm__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.arm_pc)
+ # else
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.gregs[REG_EIP])
+ # endif
+ #else
+ # ifdef __x86_64__
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.rip)
++# elif defined( __arm__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.arm_pc)
+ # else
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.eip)
+ # endif
