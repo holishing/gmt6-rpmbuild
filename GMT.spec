@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        5.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
