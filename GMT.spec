@@ -152,7 +152,7 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %files
-%doc Announcements ChangeLog COPYING.LESSERv3 COPYINGv3 LICENSE.TXT README
+%doc ChangeLog COPYING.LESSERv3 COPYINGv3 LICENSE.TXT README
 %{_bindir}/*
 %{_libdir}/*.so.5*
 %{_libdir}/gmt/
