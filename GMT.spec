@@ -10,15 +10,13 @@
 %endif
 
 Name:           GMT
-Version:        5.1.0
-Release:        2%{?dist}
+Version:        5.1.1
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
-# Patch to support arm
-Patch0:         GMT-arm.patch
 
 BuildRequires:  cmake
 BuildRequires:  gdal-devel
@@ -111,7 +109,6 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
-%patch0 -p1 -b .arm
 
 
 %build
@@ -191,6 +188,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Sun Mar 2 2014 Orion Poplawski - 5.1.1-1
+- Update to 5.1.1
+
 * Thu Jan 2 2014 Orion Poplawski - 5.1.0-2
 - Add patch to support arm
 
