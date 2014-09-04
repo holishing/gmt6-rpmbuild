@@ -1,0 +1,36 @@
+Index: src/common_sighandler.c
+===================================================================
+--- src/common_sighandler.c	(revision 13504)
++++ src/common_sighandler.c	(working copy)
+@@ -83,8 +83,12 @@
+ #else
+ # ifdef __x86_64__
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.rip)
+-# elif defined( __arm__)
++# elif defined(__arm__)
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.arm_pc)
++# elif defined(__aarch64__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.pc)
++# elif defined(__powerpc__) || defined(__powerpc64__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.regs->nip)
+ # else
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.eip)
+ # endif
+Index: src/gmt_config.h.in
+===================================================================
+--- src/gmt_config.h.in	(revision 13504)
++++ src/gmt_config.h.in	(working copy)
+@@ -283,13 +283,6 @@
+ #cmakedefine HAVE__BYTESWAP_ULONG /* for 32 bit */
+ #cmakedefine HAVE__BYTESWAP_UINT64 /* for 64 bit */
+ 
+-/* Architecture type (32/64 bits) */
+-#if !defined(__x86_64__) && !defined(__i386__) && SIZEOF_VOID_P == 4 /* on i386 */
+-#	define __i386__ 1
+-#elif !defined(__x86_64__) && !defined(__i386__) && SIZEOF_VOID_P == 8 /* on x86_64 */
+-#	define __x86_64__ 1
+-#endif
+-
+ #if !(defined(__LP64__) || defined(__LLP64__)) && defined(__x86_64__) && \
+ 		defined(SIZEOF_LONG_LONG) && defined(SIZEOF_LONG) && defined(SIZEOF_INT)
+ #	if SIZEOF_LONG == 8 && SIZEOF_INT == 4 /* 64 bit longs and pointers (most UNIX) */

@@ -11,12 +11,15 @@
 
 Name:           GMT
 Version:        5.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
+# Fix multi-platform support
+# http://gmt.soest.hawaii.edu/issues/614
+Patch0:         gmt-arch.patch
 
 BuildRequires:  cmake
 BuildRequires:  gdal-devel
@@ -109,6 +112,7 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
+%patch0 -p0 -b .arch
 
 
 %build
@@ -188,6 +192,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Thu Sep 4 2014 Orion Poplawski - 5.1.1-4
+- Add patch for multi-platform support
+
 * Fri Aug 15 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.1.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
