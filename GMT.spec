@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        5.1.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -112,7 +112,7 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
-%patch0 -p0 -b .arch
+%patch0 -p1 -b .arch
 
 
 %build
@@ -192,6 +192,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Sat Oct 4 2014 Dan Horák <dan[at]danny.cz> - 5.1.1-5
+- Fix build on s390(x)
+
 * Thu Sep 4 2014 Orion Poplawski - 5.1.1-4
 - Add patch for multi-platform support
 

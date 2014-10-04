@@ -1,8 +1,15 @@
-Index: src/common_sighandler.c
-===================================================================
---- src/common_sighandler.c	(revision 13504)
-+++ src/common_sighandler.c	(working copy)
-@@ -83,8 +83,12 @@
+diff -up gmt-5.1.1/src/common_sighandler.c.arch gmt-5.1.1/src/common_sighandler.c
+--- gmt-5.1.1/src/common_sighandler.c.arch	2014-01-31 18:39:56.000000000 -0500
++++ gmt-5.1.1/src/common_sighandler.c	2014-10-04 09:28:45.177623134 -0400
+@@ -77,14 +77,20 @@ void backtrace_symbols_fd(void *const *b
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.gregs[REG_RIP])
+ # elif defined( __arm__)
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.arm_pc)
++# elif defined(__s390__)
++#  define UC_IP(uc) ((void *) (uc)->uc_mcontext.psw.addr)
+ # else
+ #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.gregs[REG_EIP])
+ # endif
  #else
  # ifdef __x86_64__
  #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.rip)
@@ -16,10 +23,9 @@ Index: src/common_sighandler.c
  # else
  #  define UC_IP(uc) ((void *) (uc)->uc_mcontext.eip)
  # endif
-Index: src/gmt_config.h.in
-===================================================================
---- src/gmt_config.h.in	(revision 13504)
-+++ src/gmt_config.h.in	(working copy)
+diff -up gmt-5.1.1/src/gmt_config.h.in.arch gmt-5.1.1/src/gmt_config.h.in
+--- gmt-5.1.1/src/gmt_config.h.in.arch	2014-02-17 16:27:37.000000000 -0500
++++ gmt-5.1.1/src/gmt_config.h.in	2014-10-04 09:26:21.147623134 -0400
 @@ -283,13 +283,6 @@
  #cmakedefine HAVE__BYTESWAP_ULONG /* for 32 bit */
  #cmakedefine HAVE__BYTESWAP_UINT64 /* for 64 bit */
