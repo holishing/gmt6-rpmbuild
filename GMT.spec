@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        5.1.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -192,6 +192,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Mon Oct 6 2014 Orion Poplawski - 5.1.1-6
+- Fix arch patch for aarch64
+
 * Sat Oct 4 2014 Dan Horák <dan[at]danny.cz> - 5.1.1-5
 - Fix build on s390(x)
 
