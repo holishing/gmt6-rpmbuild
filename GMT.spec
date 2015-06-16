@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        5.1.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -192,6 +192,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Tue Jun 16 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.1.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Mon Oct 6 2014 Orion Poplawski - 5.1.1-6
 - Fix arch patch for aarch64
 
