@@ -11,7 +11,7 @@
 
 Name:           GMT
 Version:        5.1.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -192,6 +192,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Mon Jul 27 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.1-8
+- Rebuild for gdal 2.0.0
+
 * Tue Jun 16 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.1.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
