@@ -4,22 +4,26 @@
 
 %bcond_with octave
 %if %with octave
-%{!?octave_api: %define octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
-%define octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
-%define octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
+%{!?octave_api: %global octave_api %(octave-config -p API_VERSION 2>/dev/null || echo 0)}
+%global octave_mdir %(octave-config -p LOCALAPIFCNFILEDIR || echo)
+%global octave_octdir %(octave-config -p LOCALAPIOCTFILEDIR || echo)
+%endif
+
+%global completion_dir %(pkg-config --variable=completionsdir bash-completion)
+%if "%{completion_dir}" == ""
+%global completion_dir "/etc/bash_completion.d"
 %endif
 
 Name:           GMT
-Version:        5.1.1
-Release:        8%{?dist}
+Version:        5.1.2
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
-# Fix multi-platform support
-# http://gmt.soest.hawaii.edu/issues/614
-Patch0:         gmt-arch.patch
+# Fix bash completion install location
+Patch0:         GMT-bash-completion.patch
 
 BuildRequires:  cmake
 BuildRequires:  gdal-devel
@@ -112,7 +116,7 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
-%patch0 -p1 -b .arch
+%patch0 -p1 -b .bash-completion
 
 
 %build
@@ -129,6 +133,7 @@ pushd build
   -DGMT_OCTAVE=BOOL:ON \
 %endif
   -DGMT_OPENMP=BOOL:ON \
+  -DBASH_COMPLETION_DIR=%{completion_dir} \
   ..
 make %{?_smp_mflags}
 
@@ -173,6 +178,7 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 %config(noreplace) %{gmtconf}/dbase/grdraster.info 
 %config(noreplace) %{gmtconf}/mgd77/mgd77_paths.txt
 %{gmthome}/
+%{completion_dir}/
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 
@@ -192,6 +198,11 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Mon Jul 27 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.2-1
+- Update to 5.1.2
+- Add patch to fix bash completion install location
+- Drop arch patch applied upstream
+
 * Mon Jul 27 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.1-8
 - Rebuild for gdal 2.0.0
 
