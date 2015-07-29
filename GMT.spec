@@ -26,6 +26,7 @@ Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
 Patch0:         GMT-bash-completion.patch
 
 BuildRequires:  cmake
+BuildRequires:  bash-completion
 BuildRequires:  gdal-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
