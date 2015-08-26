@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -199,6 +199,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Wed Aug 26 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.2-2
+- Rebuild for gdal 2.0.0
+
 * Mon Jul 27 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.2-1
 - Update to 5.1.2
 - Add patch to fix bash completion install location
