@@ -122,7 +122,6 @@ mkdir build
 pushd build
 %{cmake} \
   -DGSHHG_ROOT=%{_prefix} \
-  -DFLOCK=on \
   -DGMT_INSTALL_MODULE_LINKS=off \
   -DGMT_INSTALL_TRADITIONAL_FOLDERNAMES=off \
   -DGMT_MANDIR=%{_mandir} \
