@@ -15,15 +15,13 @@
 %endif
 
 Name:           GMT
-Version:        5.1.2
-Release:        2%{?dist}
+Version:        5.2.1
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
-Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.bz2
-# Fix bash completion install location
-Patch0:         GMT-bash-completion.patch
+Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  bash-completion
@@ -117,7 +115,6 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
-%patch0 -p1 -b .bash-completion
 
 
 %build
@@ -199,6 +196,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Tue Nov 24 2015 Orion Poplawski <orion@cora.nwra.com> - 5.2.1-1
+- Update to 5.2.1
+
 * Wed Aug 26 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.2-2
 - Rebuild for gdal 2.0.0
 
