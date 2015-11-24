@@ -25,7 +25,9 @@ Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  bash-completion
+BuildRequires:  fftw-devel
 BuildRequires:  gdal-devel
+BuildRequires:  glib2-devel
 BuildRequires:  libXt-devel libXaw-devel libXmu-devel libXext-devel
 BuildRequires:  netcdf-devel
 BuildRequires:  pcre-devel
@@ -130,6 +132,7 @@ pushd build
   -DGMT_OCTAVE=BOOL:ON \
 %endif
   -DGMT_OPENMP=BOOL:ON \
+  -DGMT_USE_THREADS=BOOL:ON \
   -DBASH_COMPLETION_DIR=%{completion_dir} \
   ..
 make %{?_smp_mflags}
@@ -197,6 +200,8 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 %changelog
 * Tue Nov 24 2015 Orion Poplawski <orion@cora.nwra.com> - 5.2.1-1
 - Update to 5.2.1
+- Enable fftw support
+- Enable GMT_USE_THREADS
 
 * Wed Aug 26 2015 Orion Poplawski <orion@cora.nwra.com> - 5.1.2-2
 - Rebuild for gdal 2.0.0
