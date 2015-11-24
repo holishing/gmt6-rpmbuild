@@ -22,6 +22,9 @@ Summary:        Generic Mapping Tools
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.xz
+# Upstream patch to fix GCC 5.2 error
+# http://gmt.soest.hawaii.edu/projects/gmt/repository/revisions/15261
+Patch0:         changeset_r15261.diff
 
 BuildRequires:  cmake
 BuildRequires:  bash-completion
@@ -117,6 +120,7 @@ applications that use %{name}.
 
 %prep
 %setup -q -n gmt-%{version}
+%patch0 -p1
 
 
 %build
