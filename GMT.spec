@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -198,6 +198,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 5.3.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Sat Oct 22 2016 Orion Poplawski <orion@cora.nwra.com> - 5.3.1-1
 - Update to 5.3.1
 
