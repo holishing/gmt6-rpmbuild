@@ -141,10 +141,10 @@ make %{?_smp_mflags}
 %install
 make -C build DESTDIR=$RPM_BUILD_ROOT install
 #Setup configuration files 
-mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77,conf}
+mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77}
 pushd $RPM_BUILD_ROOT%{gmthome}/
 # put conf files in %{gmtconf} and do links in %{gmthome}
-for file in conf/*.conf mgg/gmtfile_paths dbase/grdraster.info \
+for file in mgg/gmtfile_paths dbase/grdraster.info \
     mgd77/mgd77_paths.txt; do
   mv $file $RPM_BUILD_ROOT%{gmtconf}/$file
   ln -s ../../../../../%{gmtconf}/$file $RPM_BUILD_ROOT%{gmthome}/$file
@@ -172,8 +172,6 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 %dir %{gmtconf}/mgg
 %dir %{gmtconf}/dbase
 %dir %{gmtconf}/mgd77
-%dir %{gmtconf}/conf
-%config(noreplace) %{gmtconf}/conf/*
 %config(noreplace) %{gmtconf}/mgg/gmtfile_paths
 %config(noreplace) %{gmtconf}/dbase/grdraster.info 
 %config(noreplace) %{gmtconf}/mgd77/mgd77_paths.txt
