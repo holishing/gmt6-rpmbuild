@@ -15,7 +15,7 @@
 %endif
 
 Name:           GMT
-Version:        5.3.3
+Version:        5.4.0
 Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
@@ -198,6 +198,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Tue May 9 2017 Orion Poplawski <orion@cora.nwra.com> - 5.4.0-1
+- Update to 5.4.0
+
 * Fri Mar 24 2017 Orion Poplawski <orion@cora.nwra.com> - 5.3.3-1
 - Update to 5.3.3
 
