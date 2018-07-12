@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.4.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -197,6 +197,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 5.4.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Wed Feb 21 2018 Orion Poplawski <orion@cora.nwra.com> - 5.4.3-1
 - Update to 5.4.3
 - Fix GSHHG_ROOT (bug #1545256)
