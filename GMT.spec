@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.4.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -197,6 +197,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 5.4.4-2
+- Rebuild with fixed binutils
+
 * Sun Jul 29 2018 Orion Poplawski <orion@cora.nwra.com> - 5.4.4-1
 - Update to 5.4.4
 
