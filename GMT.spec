@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.4.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -152,6 +152,10 @@ for file in mgg/gmtfile_paths dbase/grdraster.info \
 done
 popd
 
+# Configure coastline data location
+mkdir -p $RPM_BUILD_ROOT%{gmthome}/coast
+echo %{_datadir}/gshhg-gmt-nc4 > $RPM_BUILD_ROOT%{gmthome}/coast/coastline.conf
+
 # Don't ship .bat files
 find $RPM_BUILD_ROOT -name \*.bat -delete
 
@@ -197,6 +201,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Thu Oct 11 2018 Orion Poplawski <orion@cora.nwra.com> - 5.4.4-3
+- Install coastline data location config file (bug #1545256)
+
 * Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 5.4.4-2
 - Rebuild with fixed binutils
 
