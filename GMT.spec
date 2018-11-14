@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.4.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -201,6 +201,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Wed Nov 14 2018 Orion Poplawski <orion@cora.nwra.com> - 5.4.4-4
+- Rebuild for octave 4.4
+
 * Thu Oct 11 2018 Orion Poplawski <orion@cora.nwra.com> - 5.4.4-3
 - Install coastline data location config file (bug #1545256)
 
