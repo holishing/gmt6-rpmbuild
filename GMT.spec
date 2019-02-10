@@ -41,6 +41,9 @@ BuildRequires:  octave-devel
 %endif
 # less is detected by configure, and substituted in GMT.in
 BuildRequires:  less
+# For docs
+BuildRequires:  /usr/bin/sphinx-build
+BuildRequires:  ghostscript
 Requires:       less
 Requires:       %{name}-common = %{version}-%{release}
 Requires:       dcw-gmt
@@ -138,11 +141,12 @@ pushd build
   -DGMT_USE_THREADS=BOOL:ON \
   -DBASH_COMPLETION_DIR=%{completion_dir} \
   ..
-make %{?_smp_mflags}
+%make_build
+%make_build docs_man
 
 
 %install
-make -C build DESTDIR=$RPM_BUILD_ROOT install
+%make_install -C build
 #Setup configuration files 
 mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77}
 pushd $RPM_BUILD_ROOT%{gmthome}/
