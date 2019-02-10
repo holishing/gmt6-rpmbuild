@@ -129,7 +129,7 @@ pushd build
   -DGSHHG_ROOT=%{_datadir}/gshhg-gmt-nc4 \
   -DGMT_INSTALL_MODULE_LINKS=off \
   -DGMT_INSTALL_TRADITIONAL_FOLDERNAMES=off \
-  -DGMT_MANDIR=%{_mandir} \
+  -DGMT_MANDIR=share/man \
   -DLICENSE_RESTRICTED=LGPL \
 %if %with octave
   -DGMT_OCTAVE=BOOL:ON \
