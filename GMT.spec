@@ -16,14 +16,14 @@
 
 Name:           GMT
 Version:        5.4.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.xz
-# Clarify some GSHH error messages
-Patch0:         https://patch-diff.githubusercontent.com/raw/GenericMappingTools/gmt/pull/252.patch
+# Allow some GSHHG files to be missing
+Patch0:         https://patch-diff.githubusercontent.com/raw/GenericMappingTools/gmt/pull/419.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -205,6 +205,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Sun Feb 24 2019 Orion Poplawski <orion@nwra.com> - 5.4.5-2
+- Allow loading of only low resolution coastlines (bug #1545256)
+
 * Sat Feb 9 2019 Orion Poplawski <orion@cora.nwra.com> - 5.4.5-1
 - Update to 5.4.5
 
