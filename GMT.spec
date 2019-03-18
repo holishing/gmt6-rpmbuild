@@ -16,7 +16,7 @@
 
 Name:           GMT
 Version:        5.4.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
@@ -205,6 +205,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Mon Mar 18 2019 Orion Poplawski <orion@nwra.com> - 5.4.5-3
+- Rebuild for netcdf 4.6.3
+
 * Sun Feb 24 2019 Orion Poplawski <orion@nwra.com> - 5.4.5-2
 - Allow loading of only low resolution coastlines (bug #1545256)
 
