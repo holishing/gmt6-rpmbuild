@@ -15,15 +15,13 @@
 %endif
 
 Name:           GMT
-Version:        5.4.5
-Release:        3%{?dist}
+Version:        6.0.0rc2
+Release:        1%{?dist}
 Summary:        Generic Mapping Tools
 
 License:        LGPLv3+
 URL:            http://gmt.soest.hawaii.edu/
 Source0:        ftp://ftp.soest.hawaii.edu/gmt/gmt-%{version}-src.tar.xz
-# Allow some GSHHG files to be missing
-Patch0:         https://patch-diff.githubusercontent.com/raw/GenericMappingTools/gmt/pull/419.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -151,8 +149,8 @@ pushd build
 mkdir -p $RPM_BUILD_ROOT%{gmtconf}/{mgg,dbase,mgd77}
 pushd $RPM_BUILD_ROOT%{gmthome}/
 # put conf files in %{gmtconf} and do links in %{gmthome}
-for file in mgg/gmtfile_paths dbase/grdraster.info \
-    mgd77/mgd77_paths.txt; do
+for file in mgg/gmtfile_paths mgd77/mgd77_paths.txt
+do
   mv $file $RPM_BUILD_ROOT%{gmtconf}/$file
   ln -s ../../../../../%{gmtconf}/$file $RPM_BUILD_ROOT%{gmthome}/$file
 done
@@ -170,9 +168,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %files
-%doc COPYING.LESSERv3 COPYINGv3 LICENSE.TXT README
+%doc COPYING.LESSERv3 COPYINGv3 LICENSE.TXT README.md
 %{_bindir}/*
-%{_libdir}/*.so.5*
+%{_libdir}/*.so.6*
 %{_libdir}/gmt/
 
 %files common
@@ -182,7 +180,6 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 %dir %{gmtconf}/dbase
 %dir %{gmtconf}/mgd77
 %config(noreplace) %{gmtconf}/mgg/gmtfile_paths
-%config(noreplace) %{gmtconf}/dbase/grdraster.info 
 %config(noreplace) %{gmtconf}/mgd77/mgd77_paths.txt
 %{gmthome}/
 %{completion_dir}/
@@ -205,6 +202,9 @@ find $RPM_BUILD_ROOT -name \*.bat -delete
 
 
 %changelog
+* Fri Jul 12 2019 holishing <holishingtest@gmail.com> - 6.0.0rc2-1
+- Update to 6.0.0rc2
+
 * Mon Mar 18 2019 Orion Poplawski <orion@nwra.com> - 5.4.5-3
 - Rebuild for netcdf 4.6.3
 
